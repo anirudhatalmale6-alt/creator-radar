@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creator Radar - Know What to Post Before Everyone Else</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#0a0a0a;
+  color:#fff;
+  font-family:'Segoe UI',Arial,sans-serif;
+  min-height:100vh;
+}
+.container{max-width:600px;margin:0 auto;padding:20px}
+
+.hero{text-align:center;padding:40px 0 30px}
+.logo-icon{
+  width:80px;height:80px;margin:0 auto 16px;
+  border-radius:50%;
+  background:radial-gradient(circle,#0f2a1e,#060e0a);
+  border:2px solid #00ff88;
+  box-shadow:0 0 30px rgba(0,255,136,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;color:#00ff88;
+}
+.logo-icon::before{content:"";position:absolute;width:50px;height:1px;background:rgba(0,255,136,.4)}
+.logo-icon::after{content:"";position:absolute;height:50px;width:1px;background:rgba(0,255,136,.3)}
+.logo-icon{position:relative}
+h1{font-size:32px;margin-bottom:8px;letter-spacing:1px}
+h1 span{color:#00ff88}
+.tagline{color:#8aa;font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.headline{font-size:22px;line-height:1.4;margin-bottom:16px;font-weight:700}
+.sub{color:#8aa;font-size:15px;line-height:1.6;margin-bottom:30px}
+
+.stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:30px;
+}
+.stat{
+  background:#111;border:1px solid #1a3028;
+  border-radius:14px;padding:16px;text-align:center;
+}
+.stat strong{display:block;font-size:24px;color:#00ff88;margin-bottom:4px}
+.stat span{font-size:11px;color:#8aa;text-transform:uppercase;letter-spacing:.5px}
+
+.features{margin-bottom:30px}
+.feature{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px;margin-bottom:8px;
+  background:#111;border:1px solid #1a3028;
+  border-radius:12px;
+}
+.feature-icon{
+  width:36px;height:36px;border-radius:8px;flex-shrink:0;
+  background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.feature h3{font-size:14px;margin-bottom:3px}
+.feature p{font-size:12px;color:#8aa;line-height:1.4}
+
+.cta-section{
+  background:linear-gradient(180deg,#0f1f15,#0a150f);
+  border:1px solid #00ff88;
+  border-radius:18px;
+  padding:28px;
+  text-align:center;
+  margin-bottom:30px;
+  box-shadow:0 0 30px rgba(0,255,136,.08);
+}
+.cta-section h2{color:#00ff88;font-size:20px;margin-bottom:8px}
+.cta-section p{color:#8aa;font-size:13px;margin-bottom:20px}
+.cta-section .spots{
+  display:inline-block;
+  padding:6px 14px;border-radius:999px;
+  background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.4);
+  color:#ff4757;font-size:11px;font-weight:800;
+  margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;
+}
+
+input[type=email]{
+  width:100%;padding:16px;margin-bottom:10px;
+  border-radius:12px;border:1px solid #1a3028;
+  font-size:16px;background:#070d0a;color:#fff;outline:none;
+}
+input[type=email]:focus{border-color:#00ff88;box-shadow:0 0 12px rgba(0,255,136,.15)}
+input[type=text]{
+  width:100%;padding:16px;margin-bottom:10px;
+  border-radius:12px;border:1px solid #1a3028;
+  font-size:16px;background:#070d0a;color:#fff;outline:none;
+}
+.cta-btn{
+  width:100%;padding:16px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#00ff88,#00b86b);
+  color:#031109;font-size:16px;font-weight:900;
+  text-transform:uppercase;letter-spacing:1px;cursor:pointer;
+}
+.cta-btn:active{transform:scale(.98)}
+
+.proof{
+  text-align:center;
+  margin-bottom:30px;
+}
+.proof-quote{
+  font-style:italic;font-size:14px;
+  color:#ccc;line-height:1.5;
+  padding:20px;
+  background:#111;border:1px solid #1a3028;
+  border-radius:12px;margin-bottom:10px;
+}
+.proof-author{font-size:12px;color:#00ff88}
+
+.footer{text-align:center;color:#555;font-size:11px;padding:20px 0}
+
+.success{
+  display:none;
+  text-align:center;padding:30px;
+  background:rgba(0,255,136,.05);
+  border:1px solid rgba(0,255,136,.3);
+  border-radius:14px;
+}
+.success h3{color:#00ff88;font-size:20px;margin-bottom:8px}
+.success p{color:#8aa;font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <div class="logo-icon">CR</div>
+    <h1>CREATOR <span>RADAR</span></h1>
+    <div class="tagline">Find. Analyze. Predict. Grow.</div>
+    <div class="headline">Stop guessing what to post.<br>Start knowing.</div>
+    <div class="sub">Creator Radar scans Google Trends, Reddit, Twitter and UK news every 10 minutes to tell you exactly what to post, when to post it, and which products to promote.</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong>16,000+</strong><span>Views in 3 days</span></div>
+    <div class="stat"><strong>9,000+</strong><span>On one post</span></div>
+    <div class="stat"><strong>3,300+</strong><span>Likes</span></div>
+    <div class="stat"><strong>50+</strong><span>Followers per day</span></div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">&#128269;</div>
+      <div><h3>Trend Detection</h3><p>Scans thousands of data points across Google, Reddit, Twitter and news to find rising topics before they peak.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">&#9889;</div>
+      <div><h3>Content Plan</h3><p>Tells you what to post morning, afternoon and evening with ready-to-use hooks. POST NOW alerts when something is about to go viral.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">&#129504;</div>
+      <div><h3>Audience DNA</h3><p>Learns what YOUR audience responds to. Recommends topics based on your actual performance, not generic trends.</p></div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">&#128176;</div>
+      <div><h3>Product Matching</h3><p>Shows which products are trending and match your audience. Earn commission by promoting products people are already searching for.</p></div>
+    </div>
+  </div>
+
+  <div class="proof">
+    <div class="proof-quote">"I went from guessing what to post to getting 9,000 views on a single video. Creator Radar tells me exactly what my audience wants to see."</div>
+    <div class="proof-author">- Beta User, Patriotic Content Niche</div>
+  </div>
+
+  <div class="cta-section">
+    <div class="spots">Only 10 beta spots available</div>
+    <h2>Get Early Access</h2>
+    <p>Join the waiting list and be first to use Creator Radar when it launches. Free for beta users.</p>
+
+    <div id="signupForm">
+      <input type="text" id="userName" placeholder="Your name">
+      <input type="email" id="userEmail" placeholder="Your email">
+      <input type="text" id="userNiche" placeholder="Your niche (e.g. fitness, finance, lifestyle)">
+      <button class="cta-btn" onclick="submitSignup()">Join the Waiting List</button>
+    </div>
+
+    <div class="success" id="successMsg">
+      <h3>You're on the list!</h3>
+      <p>We'll be in touch when Creator Radar launches. Get ready to grow.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Creator Radar &bull; Built by creators, for creators &bull; Real results. Real time.
+  </div>
+
+</div>
+
+<script>
+function submitSignup() {
+  var name = document.getElementById('userName').value.trim();
+  var email = document.getElementById('userEmail').value.trim();
+  var niche = document.getElementById('userNiche').value.trim();
+
+  if (!email) { alert('Please enter your email'); return; }
+
+  var data = JSON.parse(localStorage.getItem('cr_signups') || '[]');
+  data.push({ name: name, email: email, niche: niche, date: new Date().toISOString() });
+  localStorage.setItem('cr_signups', JSON.stringify(data));
+
+  document.getElementById('signupForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+}
+</script>
+</body>
+</html>
