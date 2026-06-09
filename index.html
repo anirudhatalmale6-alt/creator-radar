@@ -193,17 +193,16 @@ input[type=text]{
     <h2>Get Early Access</h2>
     <p>Join the waiting list and be first to use Creator Radar when it launches. Free for beta users.</p>
 
-    <div id="signupForm">
-      <input type="text" id="userName" placeholder="Your name">
-      <input type="email" id="userEmail" placeholder="Your email">
-      <input type="text" id="userNiche" placeholder="Your niche (e.g. fitness, finance, lifestyle)">
-      <button class="cta-btn" onclick="submitSignup()">Join the Waiting List</button>
-    </div>
-
-    <div class="success" id="successMsg">
-      <h3>You're on the list!</h3>
-      <p>We'll be in touch when Creator Radar launches. Get ready to grow.</p>
-    </div>
+    <form id="signupForm" action="https://formsubmit.co/jamiemahon22@icloud.com" method="POST">
+      <input type="hidden" name="_subject" value="New Creator Radar Signup!">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://anirudhatalmale6-alt.github.io/creator-radar/thanks.html">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="name" placeholder="Your name" required>
+      <input type="email" name="email" placeholder="Your email" required>
+      <input type="text" name="niche" placeholder="Your niche (e.g. fitness, finance, lifestyle)">
+      <button type="submit" class="cta-btn">Join the Waiting List</button>
+    </form>
   </div>
 
   <div class="footer">
