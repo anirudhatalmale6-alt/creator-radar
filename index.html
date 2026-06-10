@@ -239,7 +239,8 @@ function findTrends() {
   var results = document.getElementById('trendResults');
   results.innerHTML = '<p style="color:#8aa;font-size:12px">Scanning...</p>';
 
-  var seeds = [niche, niche + " tips", niche + " for beginners", "how to " + niche, niche + " 2026"];
+  var seeds = [niche + " tips", niche + " for beginners", "how to " + niche, niche + " ideas", niche + " trends 2026"];
+  var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy","shop","price","cost","free download","pdf","wiki","meaning","definition"];
   var found = [];
   var done = 0;
 
@@ -249,7 +250,10 @@ function findTrends() {
     window[cbName] = function(d) {
       var suggestions = d[1] || [];
       suggestions.forEach(function(s) {
-        if (s.toLowerCase() !== seed && s.length > 10 && found.length < 8) {
+        var sl = s.toLowerCase();
+        var isBlocked = false;
+        for (var b = 0; b < blocked.length; b++) { if (sl.indexOf(blocked[b]) !== -1) { isBlocked = true; break; } }
+        if (sl !== seed && s.length > 10 && found.length < 8 && !isBlocked) {
           var exists = false;
           for (var i = 0; i < found.length; i++) { if (found[i] === s) exists = true; }
           if (!exists) found.push(s);
