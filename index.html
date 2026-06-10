@@ -244,32 +244,35 @@ function findTrends() {
   var done = 0;
 
   seeds.forEach(function(seed) {
-    fetch('https://suggestqueries.google.com/complete/search?client=firefox&q=' + encodeURIComponent(seed) + '&hl=en&gl=uk')
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        var suggestions = d[1] || [];
-        suggestions.forEach(function(s) {
-          if (s.toLowerCase() !== seed && s.length > 10 && found.length < 5) {
-            var exists = false;
-            for (var i = 0; i < found.length; i++) { if (found[i] === s) exists = true; }
-            if (!exists) found.push(s);
-          }
-        });
-        done++;
-        if (done === seeds.length) {
-          var h = '';
-          for (var i = 0; i < Math.min(5, found.length); i++) {
-            h += '<div style="padding:10px;margin-bottom:6px;background:#0a0a0a;border:1px solid #1a3028;border-radius:10px;border-left:3px solid #00ff88">';
-            h += '<span style="color:#00ff88;font-weight:900;margin-right:8px">' + (i+1) + '</span>';
-            h += '<span style="font-size:13px">' + found[i] + '</span>';
-            h += '</div>';
-          }
-          if (found.length === 0) h = '<p style="color:#8aa;font-size:12px">Try a different niche keyword</p>';
-          results.innerHTML = h;
-          document.getElementById('trendCta').style.display = 'block';
+    var script = document.createElement('script');
+    var cbName = 'cb_' + Math.random().toString(36).substr(2, 8);
+    window[cbName] = function(d) {
+      var suggestions = d[1] || [];
+      suggestions.forEach(function(s) {
+        if (s.toLowerCase() !== seed && s.length > 10 && found.length < 8) {
+          var exists = false;
+          for (var i = 0; i < found.length; i++) { if (found[i] === s) exists = true; }
+          if (!exists) found.push(s);
         }
-      })
-      .catch(function() { done++; });
+      });
+      done++;
+      delete window[cbName];
+      if (done === seeds.length) {
+        var h = '';
+        for (var i = 0; i < Math.min(5, found.length); i++) {
+          h += '<div style="padding:10px;margin-bottom:6px;background:#0a0a0a;border:1px solid #1a3028;border-radius:10px;border-left:3px solid #00ff88">';
+          h += '<span style="color:#00ff88;font-weight:900;margin-right:8px">' + (i+1) + '</span>';
+          h += '<span style="font-size:13px">' + found[i] + '</span>';
+          h += '</div>';
+        }
+        if (found.length === 0) h = '<p style="color:#8aa;font-size:12px">Try a different niche keyword</p>';
+        results.innerHTML = h;
+        document.getElementById('trendCta').style.display = 'block';
+      }
+    };
+    script.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' + encodeURIComponent(seed) + '&hl=en&gl=uk&callback=' + cbName;
+    script.onerror = function() { done++; delete window[cbName]; };
+    document.body.appendChild(script);
   });
 }
 
