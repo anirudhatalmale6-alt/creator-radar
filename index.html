@@ -193,6 +193,19 @@ input[type=text]{
     </div>
   </div>
 
+  <div style="background:#111;border:1px solid #1a3028;border-radius:18px;padding:24px;margin-bottom:30px;text-align:center">
+    <h2 style="color:#00ff88;font-size:20px;margin-bottom:6px">Try It Now</h2>
+    <p style="color:#8aa;font-size:13px;margin-bottom:16px">Enter your niche and get 5 trending content ideas instantly</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <input type="text" id="nicheInput" placeholder="e.g. fitness, cooking, crypto" style="flex:1;padding:14px;border-radius:12px;border:1px solid #1a3028;font-size:15px;background:#070d0a;color:#fff;outline:none">
+      <button onclick="findTrends()" style="width:auto;padding:14px 20px;margin:0;border-radius:12px;background:linear-gradient(135deg,#00ff88,#00b86b);color:#031109;font-size:14px;font-weight:900;border:none;cursor:pointer;white-space:nowrap">SCAN</button>
+    </div>
+    <div id="trendResults" style="text-align:left"></div>
+    <div id="trendCta" style="display:none;margin-top:14px">
+      <p style="color:#00ff88;font-size:13px;font-weight:700">Want this running 24/7 for YOUR niche? Join the beta below.</p>
+    </div>
+  </div>
+
   <div class="cta-section">
     <div class="spots">Only 10 beta spots available</div>
     <h2>Get Early Access</h2>
@@ -219,6 +232,47 @@ input[type=text]{
 </div>
 
 <script>
+function findTrends() {
+  var niche = document.getElementById('nicheInput').value.trim();
+  if (!niche) { alert('Enter your niche first!'); return; }
+
+  var results = document.getElementById('trendResults');
+  results.innerHTML = '<p style="color:#8aa;font-size:12px">Scanning...</p>';
+
+  var seeds = [niche, niche + " tips", niche + " for beginners", "how to " + niche, niche + " 2026"];
+  var found = [];
+  var done = 0;
+
+  seeds.forEach(function(seed) {
+    fetch('https://suggestqueries.google.com/complete/search?client=firefox&q=' + encodeURIComponent(seed) + '&hl=en&gl=uk')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var suggestions = d[1] || [];
+        suggestions.forEach(function(s) {
+          if (s.toLowerCase() !== seed && s.length > 10 && found.length < 5) {
+            var exists = false;
+            for (var i = 0; i < found.length; i++) { if (found[i] === s) exists = true; }
+            if (!exists) found.push(s);
+          }
+        });
+        done++;
+        if (done === seeds.length) {
+          var h = '';
+          for (var i = 0; i < Math.min(5, found.length); i++) {
+            h += '<div style="padding:10px;margin-bottom:6px;background:#0a0a0a;border:1px solid #1a3028;border-radius:10px;border-left:3px solid #00ff88">';
+            h += '<span style="color:#00ff88;font-weight:900;margin-right:8px">' + (i+1) + '</span>';
+            h += '<span style="font-size:13px">' + found[i] + '</span>';
+            h += '</div>';
+          }
+          if (found.length === 0) h = '<p style="color:#8aa;font-size:12px">Try a different niche keyword</p>';
+          results.innerHTML = h;
+          document.getElementById('trendCta').style.display = 'block';
+        }
+      })
+      .catch(function() { done++; });
+  });
+}
+
 (function(){
   fetch('https://api.countapi.xyz/hit/creator-radar/visits')
     .then(function(r){return r.json()})
