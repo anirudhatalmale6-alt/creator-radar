@@ -215,7 +215,7 @@ input[type=text]{
     <form id="signupForm" action="https://formsubmit.co/jamiemahon22@icloud.com" method="POST">
       <input type="hidden" name="_subject" value="New Creator Radar Signup!">
       <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://anirudhatalmale6-alt.github.io/creator-radar/thanks.html">
+      <input type="hidden" name="_next" value="https://creatorradar.co.uk/thanks.html">
       <input type="hidden" name="_captcha" value="false">
       <input type="text" name="name" placeholder="Your name" required>
       <input type="email" name="email" placeholder="Your email" required>
@@ -234,8 +234,17 @@ input[type=text]{
 
 <script>
 function findTrends() {
-  var niche = document.getElementById('nicheInput').value.trim();
+  var niche = document.getElementById('nicheInput').value.trim().toLowerCase();
   if (!niche) { alert('Enter your niche first!'); return; }
+
+  var bannedWords = ["porn","sex","xxx","nude","naked","hentai","onlyfans","fetish","bdsm","erotic","milf","dick","cock","pussy","boob","tits","ass ","arse","orgasm","masturbat","dildo","vibrator","blowjob","handjob","anal","vagina","penis","slut","whore","hooker","prostitut","escort","stripper","cum ","cumshot","threesome","gangbang","rape","molest","pedo","paedo","pedophil","child abuse","incest","bestiality","zoophil","necrophil","snuff","gore","murder how","kill how","how to kill","how to murder","suicide how","how to suicide","self harm","cut myself","hang myself","drug deal","how to make meth","how to make crack","how to make bomb","how to hack","how to steal","credit card hack","identity theft","counterfeit","money launder","fraud how","scam how","terrorism","terrorist","bomb mak","weapon mak","gun mak","exploit child","child porn","groom child","human traffic","fuck","shit","cunt","wank","bollocks","tosser","twat","piss","bastard","nigger","nigga","faggot","fag ","dyke","retard","spastic","cracker ","chink","gook","spic","kike","tranny","cocaine","heroin","meth","crack pipe","fentanyl","ketamine","ecstasy","mdma","lsd","shroom","weed","cannabis","marijuana","how to grow weed","xanax","valium","oxycontin","darknet","dark web","tor market","silk road"];
+  var nicheCheck = " " + niche + " ";
+  for (var i = 0; i < bannedWords.length; i++) {
+    if (niche.indexOf(bannedWords[i]) !== -1) {
+      document.getElementById('trendResults').innerHTML = '<p style="color:#ff4757;font-size:13px;font-weight:600;padding:16px;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:10px">Please enter a valid content niche (e.g. fitness, cooking, fashion, travel)</p>';
+      return;
+    }
+  }
 
   var results = document.getElementById('trendResults');
   results.innerHTML = '<div style="text-align:center;padding:16px"><div style="display:inline-block;width:20px;height:20px;border:2px solid #00ff88;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div><p style="color:#8aa;font-size:12px;margin-top:8px">Scanning Google trends for ' + niche + '...</p></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
@@ -250,7 +259,7 @@ function findTrends() {
     "how " + niche + " actually works",
     niche + " in 2025"
   ];
-  var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy","shop","price","cost","free download","pdf","wiki","meaning","definition","certificate","what is ","class ","school","university","college","weather","map","lyrics","movie","imdb","netflix","bollywood","hollywood","rotten tomatoes","stock price","share price","net worth","age ","height ","weight ","birthday","born ","died","funeral","obituary","hospital","doctor","nhs","gp ","dentist","lawyer","solicitor","accountant","plumber","electrician","mechanic","insurance","mortgage","loan","credit card","bank ","tax ","council","government","parliament","election","vote ","court ","prison","police","crime","arrest","murder","assault","rape","abuse","oil ","pan ","pans","pots","pot ","equipment","machine","device","brand","company","store","song","singer","actor","actress","film ","series","show ","season","episode","album","band ","concert","ticket","hotel","flight","booking","reservation","recipe for","calories","nutrition","supplement","vitamin","protein powder","creatine"];
+  var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy","shop","price","cost","free download","pdf","wiki","meaning","definition","certificate","what is ","class ","school","university","college","weather","map","lyrics","movie","imdb","netflix","bollywood","hollywood","rotten tomatoes","stock price","share price","net worth","age ","height ","weight ","birthday","born ","died","funeral","obituary","hospital","doctor","nhs","gp ","dentist","lawyer","solicitor","accountant","plumber","electrician","mechanic","insurance","mortgage","loan","credit card","bank ","tax ","council","government","parliament","election","vote ","court ","prison","police","crime","arrest","murder","assault","rape","abuse","oil ","pan ","pans","pots","pot ","equipment","machine","device","brand","company","store","song","singer","actor","actress","film ","series","show ","season","episode","album","band ","concert","ticket","hotel","flight","booking","reservation","recipe for","calories","nutrition","supplement","vitamin","protein powder","creatine","porn","sex","xxx","nude","naked","hentai","onlyfans","fetish","bdsm","erotic","milf","dick","cock","pussy","boob","tits","slut","whore","fuck","shit","cunt","wank","nigger","nigga","faggot","retard","drug","cocaine","heroin","meth","fentanyl","kill","suicide","self harm","bomb","terrorist","hack","steal","fraud","scam","pedophil","child abuse","incest","trafficking"];
   var found = [];
   var done = 0;
   var tags = ["TRENDING","HOT TAKE","RISING","VIRAL ANGLE","CONTENT GAP"];
