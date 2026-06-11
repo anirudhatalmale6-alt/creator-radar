@@ -255,7 +255,9 @@ function findTrends() {
   var done = 0;
   var tags = ["TRENDING","HOT TAKE","RISING","VIRAL ANGLE","CONTENT GAP"];
 
-  seeds.forEach(function(seed) {
+  var perSeed = {};
+  seeds.forEach(function(seed, si) {
+    perSeed[si] = [];
     var script = document.createElement('script');
     var cbName = 'cb_' + Math.random().toString(36).substr(2, 8);
     window[cbName] = function(d) {
@@ -264,20 +266,22 @@ function findTrends() {
         var sl = s.toLowerCase();
         var isBlocked = false;
         for (var b = 0; b < blocked.length; b++) { if (sl.indexOf(blocked[b]) !== -1) { isBlocked = true; break; } }
-        if (sl !== seed.toLowerCase() && s.length > 12 && s.length < 80 && found.length < 15 && !isBlocked) {
+        if (sl !== seed.toLowerCase() && s.length > 12 && s.length < 80 && !isBlocked && perSeed[si].length < 2) {
           var isDup = false;
-          var words = sl.split(' ').slice(0, 3).join(' ');
-          for (var i = 0; i < found.length; i++) {
-            var fw = found[i].toLowerCase().split(' ').slice(0, 3).join(' ');
-            if (found[i].toLowerCase() === sl || fw === words) isDup = true;
-          }
-          if (!isDup) found.push(s);
+          var w2 = sl.split(' ').slice(0, 2).join(' ');
+          for (var k in perSeed) { for (var j = 0; j < perSeed[k].length; j++) {
+            var ew = perSeed[k][j].toLowerCase().split(' ').slice(0, 2).join(' ');
+            if (perSeed[k][j].toLowerCase() === sl || ew === w2) isDup = true;
+          }}
+          if (!isDup) perSeed[si].push(s);
         }
       });
       done++;
       delete window[cbName];
       if (done === seeds.length) {
-        var best = found.slice(0, 5);
+        var all = [];
+        for (var k = 0; k < seeds.length; k++) { for (var j = 0; j < perSeed[k].length; j++) all.push(perSeed[k][j]); }
+        var best = all.slice(0, 5);
         var h = '';
         var tagColors = ["#00ff88","#ffaa00","#00bbff","#ff6b6b","#cc77ff"];
         for (var i = 0; i < best.length; i++) {
