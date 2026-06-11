@@ -241,19 +241,19 @@ function findTrends() {
   results.innerHTML = '<div style="text-align:center;padding:16px"><div style="display:inline-block;width:20px;height:20px;border:2px solid #00ff88;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div><p style="color:#8aa;font-size:12px;margin-top:8px">Scanning Google trends for ' + niche + '...</p></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
 
   var seeds = [
-    "why is " + niche,
-    niche + " mistakes beginners",
-    niche + " tips that actually work",
-    niche + " trend 2024",
-    "how to " + niche + " for beginners",
-    niche + " vs ",
+    "why " + niche + " is so",
+    niche + " mistakes people make",
     niche + " nobody talks about",
-    "best " + niche + " for"
+    niche + " vs ",
+    niche + " myths that are",
+    "unpopular " + niche + " opinion",
+    niche + " that changed my",
+    niche + " hack that actually"
   ];
-  var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy online","shop online","price of","free download","pdf","wiki","meaning of","definition of","certificate","what is "+niche,"class","school","university","college","weather","map","lyrics","movie","imdb","rotten tomatoes","stock price","share price","net worth","age","height","weight","birthday","born","died","funeral","obituary","hospital","doctor","nhs","gp ","dentist","lawyer","solicitor","accountant","plumber","electrician","mechanic","insurance","mortgage","loan","credit card","bank ","tax ","council","government","parliament","election","vote ","court ","prison","police","crime","arrest","murder","assault","rape","abuse"];
+  var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy","shop","price","cost","free download","pdf","wiki","meaning","definition","certificate","what is ","class ","school","university","college","weather","map","lyrics","movie","imdb","netflix","bollywood","hollywood","rotten tomatoes","stock price","share price","net worth","age ","height ","weight ","birthday","born ","died","funeral","obituary","hospital","doctor","nhs","gp ","dentist","lawyer","solicitor","accountant","plumber","electrician","mechanic","insurance","mortgage","loan","credit card","bank ","tax ","council","government","parliament","election","vote ","court ","prison","police","crime","arrest","murder","assault","rape","abuse","oil ","pan ","pans","pots","pot ","equipment","machine","device","brand","company","store","song","singer","actor","actress","film ","series","show ","season","episode","album","band ","concert","ticket","hotel","flight","booking","reservation","recipe for","calories","nutrition","supplement","vitamin","protein powder","creatine"];
   var found = [];
   var done = 0;
-  var tags = ["TRENDING","HOT TOPIC","RISING","VIRAL POTENTIAL","CONTENT GAP"];
+  var tags = ["TRENDING","HOT TAKE","RISING","VIRAL ANGLE","CONTENT GAP"];
 
   seeds.forEach(function(seed) {
     var script = document.createElement('script');
@@ -264,10 +264,14 @@ function findTrends() {
         var sl = s.toLowerCase();
         var isBlocked = false;
         for (var b = 0; b < blocked.length; b++) { if (sl.indexOf(blocked[b]) !== -1) { isBlocked = true; break; } }
-        if (sl !== seed.toLowerCase() && s.length > 12 && s.length < 80 && found.length < 12 && !isBlocked) {
-          var exists = false;
-          for (var i = 0; i < found.length; i++) { if (found[i].toLowerCase() === sl) exists = true; }
-          if (!exists) found.push(s);
+        if (sl !== seed.toLowerCase() && s.length > 12 && s.length < 80 && found.length < 15 && !isBlocked) {
+          var isDup = false;
+          var words = sl.split(' ').slice(0, 3).join(' ');
+          for (var i = 0; i < found.length; i++) {
+            var fw = found[i].toLowerCase().split(' ').slice(0, 3).join(' ');
+            if (found[i].toLowerCase() === sl || fw === words) isDup = true;
+          }
+          if (!isDup) found.push(s);
         }
       });
       done++;
