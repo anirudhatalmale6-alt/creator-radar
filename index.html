@@ -216,7 +216,8 @@ input[type=text]{
     <div id="signupForm">
       <input type="text" id="userName" placeholder="Your name" required style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
       <input type="email" id="userEmail" placeholder="Your email" required>
-      <input type="password" id="userPassword" placeholder="Create a password" style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
+      <input type="password" id="userPassword" placeholder="e.g. MyPass1!" style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
+      <div style="font-size:11px;color:#556;margin-bottom:6px">Must include uppercase, lowercase, number and special character</div>
       <input type="text" id="userNiche" placeholder="Your niche (e.g. fitness, finance, lifestyle)" style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
       <div style="display:flex;align-items:flex-start;gap:10px;margin:14px 0 6px 0;text-align:left;cursor:pointer" onclick="var cb=document.getElementById('betaConsentLanding');cb.checked=!cb.checked;">
         <input type="checkbox" id="betaConsentLanding" style="min-width:20px;min-height:20px;margin-top:2px;accent-color:#00ff88;cursor:pointer" onclick="event.stopPropagation()">
@@ -346,6 +347,7 @@ async function betaSignup() {
   if (!name) { msg.innerText = 'Please enter your name.'; msg.style.color = '#ff4757'; return; }
   if (!email) { msg.innerText = 'Please enter your email.'; msg.style.color = '#ff4757'; return; }
   if (!password || password.length < 6) { msg.innerText = 'Password must be at least 6 characters.'; msg.style.color = '#ff4757'; return; }
+  if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^a-zA-Z0-9]/.test(password)) { msg.innerText = 'Password needs a lowercase letter, uppercase letter, number, and a special character (e.g. MyPass1!)'; msg.style.color = '#ff4757'; return; }
   if (!consent) { msg.innerText = 'Please agree to be contacted about the beta to continue.'; msg.style.color = '#ff4757'; return; }
 
   msg.innerText = 'Setting up your account...'; msg.style.color = '#00ff88';
@@ -359,7 +361,9 @@ async function betaSignup() {
   });
 
   if (r.error) {
-    msg.innerText = r.error.message; msg.style.color = '#ff4757';
+    var emsg = r.error.message;
+    if (emsg.indexOf('weak_password') !== -1 || emsg.indexOf('Password should') !== -1) emsg = 'Password needs a lowercase letter, uppercase letter, number, and a special character (e.g. MyPass1!)';
+    msg.innerText = emsg; msg.style.color = '#ff4757';
     return;
   }
 
@@ -385,4 +389,5 @@ async function betaSignup() {
 </script>
 </body>
 </html>
+
 
