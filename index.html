@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Creator Radar - Know What to Post Before Everyone Else</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
@@ -212,20 +213,24 @@ input[type=text]{
     <h2>Join the Creator Radar Beta</h2>
     <p>You're one of the first creators to get early access. Sign up below and we'll get you set up with your own dashboard - real trending data, content ideas, and hooks tailored to your niche.</p>
 
-    <form id="signupForm" action="https://formsubmit.co/jamiemahon22@icloud.com" method="POST">
-      <input type="hidden" name="_subject" value="New Creator Radar Beta Signup!">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://creatorradar.co.uk/thanks.html">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="text" name="name" placeholder="Your name" required>
-      <input type="email" name="email" placeholder="Your email" required>
-      <input type="text" name="niche" placeholder="Your niche (e.g. fitness, finance, lifestyle)">
+    <div id="signupForm">
+      <input type="text" id="userName" placeholder="Your name" required style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
+      <input type="email" id="userEmail" placeholder="Your email" required>
+      <input type="password" id="userPassword" placeholder="Create a password" style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
+      <input type="text" id="userNiche" placeholder="Your niche (e.g. fitness, finance, lifestyle)" style="width:100%;padding:16px;margin-bottom:10px;border-radius:12px;border:1px solid #1a3028;font-size:16px;background:#070d0a;color:#fff;outline:none">
       <div style="display:flex;align-items:flex-start;gap:10px;margin:14px 0 6px 0;text-align:left;cursor:pointer" onclick="var cb=document.getElementById('betaConsentLanding');cb.checked=!cb.checked;">
-        <input type="checkbox" id="betaConsentLanding" name="beta_consent" value="yes" required style="min-width:20px;min-height:20px;margin-top:2px;accent-color:#00ff88;cursor:pointer" onclick="event.stopPropagation()">
+        <input type="checkbox" id="betaConsentLanding" style="min-width:20px;min-height:20px;margin-top:2px;accent-color:#00ff88;cursor:pointer" onclick="event.stopPropagation()">
         <span style="font-size:12px;color:#8aa;line-height:1.5">I agree to be contacted by Creator Radar about joining the beta programme. This includes account setup details and next steps only - no marketing emails.</span>
       </div>
-      <button type="submit" class="cta-btn">Join the Beta</button>
-    </form>
+      <button type="button" class="cta-btn" onclick="betaSignup()">Join the Beta</button>
+      <p id="signupMsg" style="font-size:13px;margin-top:12px;text-align:center"></p>
+    </div>
+
+    <div id="successMsg" class="success">
+      <h3>Welcome to Creator Radar!</h3>
+      <p>Your account is ready. Head to your dashboard to start scanning trends.</p>
+      <a href="https://patriotradar.github.io/patriot-radar-dashboard/" style="display:inline-block;margin-top:16px;padding:14px 28px;background:linear-gradient(135deg,#00ff88,#00b86b);color:#031109;font-size:15px;font-weight:900;border-radius:12px;text-decoration:none;text-transform:uppercase;letter-spacing:1px">Open Your Dashboard</a>
+    </div>
   </div>
 
   <div class="footer">
@@ -326,16 +331,53 @@ function findTrends() {
     })
     .catch(function(){});
 })();
-function submitSignup() {
+var SUPABASE_URL = "https://kdwqnlgdanzigpdwyqbh.supabase.co";
+var SUPABASE_ANON_KEY = "sb_publishable_7WtTtv9S4dl5jO-YE9QXRg_Ldy3gU_G";
+var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function betaSignup() {
   var name = document.getElementById('userName').value.trim();
   var email = document.getElementById('userEmail').value.trim();
+  var password = document.getElementById('userPassword').value;
   var niche = document.getElementById('userNiche').value.trim();
+  var consent = document.getElementById('betaConsentLanding').checked;
+  var msg = document.getElementById('signupMsg');
 
-  if (!email) { alert('Please enter your email'); return; }
+  if (!name) { msg.innerText = 'Please enter your name.'; msg.style.color = '#ff4757'; return; }
+  if (!email) { msg.innerText = 'Please enter your email.'; msg.style.color = '#ff4757'; return; }
+  if (!password || password.length < 6) { msg.innerText = 'Password must be at least 6 characters.'; msg.style.color = '#ff4757'; return; }
+  if (!consent) { msg.innerText = 'Please agree to be contacted about the beta to continue.'; msg.style.color = '#ff4757'; return; }
 
-  var data = JSON.parse(localStorage.getItem('cr_signups') || '[]');
-  data.push({ name: name, email: email, niche: niche, date: new Date().toISOString() });
-  localStorage.setItem('cr_signups', JSON.stringify(data));
+  msg.innerText = 'Setting up your account...'; msg.style.color = '#00ff88';
+
+  var r = await supabaseClient.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: { name: name, niche: niche, beta_consent: true, signup_source: 'landing_page' }
+    }
+  });
+
+  if (r.error) {
+    msg.innerText = r.error.message; msg.style.color = '#ff4757';
+    return;
+  }
+
+  if (r.data && r.data.user && r.data.user.identities && r.data.user.identities.length === 0) {
+    msg.innerText = 'This email is already registered. Head to the dashboard to log in.'; msg.style.color = '#ffaa00';
+    return;
+  }
+
+  // Notify Jamie via FormSubmit
+  try {
+    var fd = new FormData();
+    fd.append('name', name);
+    fd.append('email', email);
+    fd.append('niche', niche || 'Not specified');
+    fd.append('_subject', 'New Beta Signup: ' + name);
+    fd.append('_template', 'table');
+    fetch('https://formsubmit.co/ajax/jamiemahon22@icloud.com', { method: 'POST', body: fd });
+  } catch(e) {}
 
   document.getElementById('signupForm').style.display = 'none';
   document.getElementById('successMsg').style.display = 'block';
