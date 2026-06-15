@@ -336,6 +336,23 @@ var SUPABASE_URL = "https://kdwqnlgdanzigpdwyqbh.supabase.co";
 var SUPABASE_ANON_KEY = "sb_publishable_7WtTtv9S4dl5jO-YE9QXRg_Ldy3gU_G";
 var supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+async function trackEvent(eventType, metadata) {
+  try {
+    var sess = await supabaseClient.auth.getSession();
+    var user = (sess.data && sess.data.session) ? sess.data.session.user : null;
+    await supabaseClient.from("cr_analytics").insert([{
+      event_type: eventType,
+      user_id: user ? user.id : null,
+      user_email: user ? user.email : null,
+      metadata: metadata || {},
+      page: "landing",
+      created_at: new Date().toISOString()
+    }]);
+  } catch(e) {}
+}
+
+trackEvent("page_view", {page: "landing"});
+
 async function betaSignup() {
   var name = document.getElementById('userName').value.trim();
   var email = document.getElementById('userEmail').value.trim();
@@ -384,6 +401,7 @@ async function betaSignup() {
   } catch(e) {}
 
   if (r.data && r.data.session) {
+    trackEvent("signup", {niche: niche || "not specified", source: "landing_page", name: name});
     msg.innerText = 'Account created! Taking you to your dashboard...'; msg.style.color = '#00ff88';
     var s = r.data.session;
     setTimeout(function() {
