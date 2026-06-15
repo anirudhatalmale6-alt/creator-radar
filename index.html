@@ -208,19 +208,23 @@ input[type=text]{
   </div>
 
   <div class="cta-section">
-    <div class="spots">Only 10 beta spots available</div>
-    <h2>Get Early Access</h2>
-    <p>Join the waiting list and be first to use Creator Radar when it launches. Free for beta users.</p>
+    <div class="spots">Beta access now open</div>
+    <h2>Join the Creator Radar Beta</h2>
+    <p>You're one of the first creators to get early access. Sign up below and we'll get you set up with your own dashboard - real trending data, content ideas, and hooks tailored to your niche.</p>
 
     <form id="signupForm" action="https://formsubmit.co/jamiemahon22@icloud.com" method="POST">
-      <input type="hidden" name="_subject" value="New Creator Radar Signup!">
+      <input type="hidden" name="_subject" value="New Creator Radar Beta Signup!">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_next" value="https://creatorradar.co.uk/thanks.html">
       <input type="hidden" name="_captcha" value="false">
       <input type="text" name="name" placeholder="Your name" required>
       <input type="email" name="email" placeholder="Your email" required>
       <input type="text" name="niche" placeholder="Your niche (e.g. fitness, finance, lifestyle)">
-      <button type="submit" class="cta-btn">Join the Waiting List</button>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin:14px 0 6px 0;text-align:left;cursor:pointer" onclick="var cb=document.getElementById('betaConsentLanding');cb.checked=!cb.checked;">
+        <input type="checkbox" id="betaConsentLanding" name="beta_consent" value="yes" required style="min-width:20px;min-height:20px;margin-top:2px;accent-color:#00ff88;cursor:pointer" onclick="event.stopPropagation()">
+        <span style="font-size:12px;color:#8aa;line-height:1.5">I agree to be contacted by Creator Radar about joining the beta programme. This includes account setup details and next steps only - no marketing emails.</span>
+      </div>
+      <button type="submit" class="cta-btn">Join the Beta</button>
     </form>
   </div>
 
@@ -339,3 +343,4 @@ function submitSignup() {
 </script>
 </body>
 </html>
+
