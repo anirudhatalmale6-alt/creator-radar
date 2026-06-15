@@ -383,6 +383,15 @@ async function betaSignup() {
     fetch('https://formsubmit.co/ajax/jamiemahon22@icloud.com', { method: 'POST', body: fd });
   } catch(e) {}
 
+  if (r.data && r.data.session) {
+    msg.innerText = 'Account created! Taking you to your dashboard...'; msg.style.color = '#00ff88';
+    var s = r.data.session;
+    setTimeout(function() {
+      window.location.href = 'https://patriotradar.github.io/patriot-radar-dashboard/#access_token=' + encodeURIComponent(s.access_token) + '&refresh_token=' + encodeURIComponent(s.refresh_token) + '&type=signup';
+    }, 1500);
+    return;
+  }
+
   document.getElementById('signupForm').style.display = 'none';
   document.getElementById('successMsg').style.display = 'block';
 }
