@@ -263,6 +263,17 @@ var USER_REGION = (function() {
   return "us";
 })();
 
+var UTM_PARAMS = (function() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    return {
+      source: params.get("utm_source") || "direct",
+      medium: params.get("utm_medium") || "",
+      campaign: params.get("utm_campaign") || ""
+    };
+  } catch(e) { return {source: "direct", medium: "", campaign: ""}; }
+})();
+
 function findTrends() {
   var niche = document.getElementById('nicheInput').value.trim().toLowerCase();
   if (!niche) { alert('Enter your niche first!'); return; }
@@ -371,7 +382,7 @@ async function trackEvent(eventType, metadata) {
   } catch(e) {}
 }
 
-trackEvent("page_view", {page: "landing"});
+trackEvent("page_view", {page: "landing", utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign});
 
 async function betaSignup() {
   var name = document.getElementById('userName').value.trim();
@@ -393,7 +404,7 @@ async function betaSignup() {
     email: email,
     password: password,
     options: {
-      data: { name: name, niche: niche, beta_consent: true, signup_source: 'landing_page' }
+      data: { name: name, niche: niche, beta_consent: true, signup_source: 'landing_page', utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign }
     }
   });
 
@@ -421,11 +432,11 @@ async function betaSignup() {
   } catch(e) {}
 
   if (r.data && r.data.session) {
-    trackEvent("signup", {niche: niche || "not specified", source: "landing_page", name: name});
+    trackEvent("signup", {niche: niche || "not specified", source: "landing_page", name: name, utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign});
     msg.innerText = 'Account created! Taking you to your dashboard...'; msg.style.color = '#00ff88';
     var s = r.data.session;
     setTimeout(function() {
-      window.location.href = 'https://patriotradar.github.io/patriot-radar-dashboard/#access_token=' + encodeURIComponent(s.access_token) + '&refresh_token=' + encodeURIComponent(s.refresh_token) + '&type=signup';
+      window.location.href = 'https://patriotradar.github.io/patriot-radar-dashboard/#access_token=' + encodeURIComponent(s.access_token) + '&refresh_token=' + encodeURIComponent(s.refresh_token) + '&type=signup&utm_source=' + encodeURIComponent(UTM_PARAMS.source);
     }, 1500);
     return;
   }
