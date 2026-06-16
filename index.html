@@ -440,11 +440,14 @@ async function betaSignup() {
     trackEvent("signup", {niche: niche || "not specified", source: "landing_page", name: name, utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign, ref: REF_CODE || "none"});
     if (REF_CODE && r.data.session.user) {
       try {
-        await supabaseClient.from("cr_referrals").insert([{
-          referrer_code: REF_CODE,
-          referred_id: r.data.session.user.id,
-          referred_email: email
-        }]);
+        var existingRefs = await supabaseClient.from("cr_referrals").select("id").eq("referrer_code", REF_CODE);
+        if (!existingRefs.data || existingRefs.data.length < 5) {
+          await supabaseClient.from("cr_referrals").insert([{
+            referrer_code: REF_CODE,
+            referred_id: r.data.session.user.id,
+            referred_email: email
+          }]);
+        }
       } catch(e) {}
     }
     msg.innerText = 'Account created! Taking you to your dashboard...'; msg.style.color = '#00ff88';
