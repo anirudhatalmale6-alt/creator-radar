@@ -243,6 +243,26 @@ input[type=text]{
 </div>
 
 <script>
+var USER_REGION = (function() {
+  try {
+    var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    var tzMap = {
+      "America/": "us", "US/": "us", "Pacific/Honolulu": "us",
+      "Europe/London": "gb", "Europe/Belfast": "gb",
+      "Europe/Dublin": "ie",
+      "Australia/": "au",
+      "Pacific/Auckland": "nz",
+      "America/Toronto": "ca", "America/Vancouver": "ca", "America/Edmonton": "ca", "America/Winnipeg": "ca", "America/Halifax": "ca", "America/St_Johns": "ca",
+      "Asia/Kolkata": "in", "Asia/Calcutta": "in",
+      "Europe/Berlin": "de", "Europe/Paris": "fr", "Europe/Madrid": "es", "Europe/Rome": "it", "Europe/Amsterdam": "nl"
+    };
+    for (var prefix in tzMap) { if (tz.indexOf(prefix) === 0 || tz === prefix) return tzMap[prefix]; }
+    var lang = (navigator.language || "en-US").split("-");
+    if (lang.length > 1) return lang[1].toLowerCase();
+  } catch(e) {}
+  return "us";
+})();
+
 function findTrends() {
   var niche = document.getElementById('nicheInput').value.trim().toLowerCase();
   if (!niche) { alert('Enter your niche first!'); return; }
@@ -318,7 +338,7 @@ function findTrends() {
         document.getElementById('trendCta').style.display = 'block';
       }
     };
-    script.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' + encodeURIComponent(seed) + '&hl=en&gl=uk&callback=' + cbName;
+    script.src = 'https://suggestqueries.google.com/complete/search?client=chrome&q=' + encodeURIComponent(seed) + '&hl=en&gl=' + USER_REGION + '&callback=' + cbName;
     script.onerror = function() { done++; delete window[cbName]; };
     document.body.appendChild(script);
   });
@@ -416,5 +436,6 @@ async function betaSignup() {
 </script>
 </body>
 </html>
+
 
 
