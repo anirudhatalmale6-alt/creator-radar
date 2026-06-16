@@ -441,7 +441,7 @@ async function betaSignup() {
     if (REF_CODE && r.data.session.user) {
       try {
         var existingRefs = await supabaseClient.from("cr_referrals").select("id").eq("referrer_code", REF_CODE);
-        if (!existingRefs.data || existingRefs.data.length < 5) {
+        if (!existingRefs.data || existingRefs.data.length < 3) {
           await supabaseClient.from("cr_referrals").insert([{
             referrer_code: REF_CODE,
             referred_id: r.data.session.user.id,
