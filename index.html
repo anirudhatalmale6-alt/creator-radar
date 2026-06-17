@@ -296,19 +296,20 @@ function findTrends() {
   results.innerHTML = '<div style="text-align:center;padding:16px"><div style="display:inline-block;width:20px;height:20px;border:2px solid #00ff88;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite"></div><p style="color:#8aa;font-size:12px;margin-top:8px">Scanning Google trends for ' + niche + '...</p></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
 
   var seeds = [
-    "why i stopped " + niche,
-    "truth about " + niche,
-    niche + " biggest mistake",
-    niche + " is overrated",
-    niche + " changed my life",
-    niche + " things nobody tells you",
-    "how " + niche + " actually works",
-    niche + " in 2025"
+    niche + " trending right now",
+    niche + " content ideas 2026",
+    "best " + niche + " tips",
+    niche + " hacks that actually work",
+    niche + " for beginners",
+    "how to grow " + niche + " audience",
+    niche + " viral trends",
+    niche + " that changed my life"
   ];
+  var negativeWords = ["quit","stopped","hate","boring","overrated","dead","dying","worst","terrible","awful","annoying","toxic","scam","fake","pointless","useless","waste","bad thing","not care","give up","failed","failure","depressing","sad truth","dark side","problem with","wrong with","ruined"];
   var blocked = ["jobs","salary","courses","degree","near me","hiring","vacancy","career","apprentice","indeed","glassdoor","linkedin","apply","interview","qualification","amazon","ebay","buy","shop","price","cost","free download","pdf","wiki","meaning","definition","certificate","what is ","class ","school","university","college","weather","map","lyrics","movie","imdb","netflix","bollywood","hollywood","rotten tomatoes","stock price","share price","net worth","age ","height ","weight ","birthday","born ","died","funeral","obituary","hospital","doctor","nhs","gp ","dentist","lawyer","solicitor","accountant","plumber","electrician","mechanic","insurance","mortgage","loan","credit card","bank ","tax ","council","government","parliament","election","vote ","court ","prison","police","crime","arrest","murder","assault","rape","abuse","oil ","pan ","pans","pots","pot ","equipment","machine","device","brand","company","store","song","singer","actor","actress","film ","series","show ","season","episode","album","band ","concert","ticket","hotel","flight","booking","reservation","recipe for","calories","nutrition","supplement","vitamin","protein powder","creatine","porn","sex","xxx","nude","naked","hentai","onlyfans","fetish","bdsm","erotic","milf","dick","cock","pussy","boob","tits","slut","whore","fuck","shit","cunt","wank","nigger","nigga","faggot","retard","drug","cocaine","heroin","meth","fentanyl","kill","suicide","self harm","bomb","terrorist","hack","steal","fraud","scam","pedophil","child abuse","incest","trafficking"];
   var found = [];
   var done = 0;
-  var tags = ["TRENDING","HOT TAKE","RISING","VIRAL ANGLE","CONTENT GAP"];
+  var tags = ["TRENDING NOW","POST THIS","RISING FAST","VIRAL ANGLE","CONTENT IDEA"];
 
   var perSeed = {};
   seeds.forEach(function(seed, si) {
@@ -321,6 +322,7 @@ function findTrends() {
         var sl = s.toLowerCase();
         var isBlocked = false;
         for (var b = 0; b < blocked.length; b++) { if (sl.indexOf(blocked[b]) !== -1) { isBlocked = true; break; } }
+        if (!isBlocked) { for (var nw = 0; nw < negativeWords.length; nw++) { if (sl.indexOf(negativeWords[nw]) !== -1) { isBlocked = true; break; } } }
         if (sl !== seed.toLowerCase() && s.length > 12 && s.length < 80 && !isBlocked && perSeed[si].length < 2) {
           var isDup = false;
           var w2 = sl.split(' ').slice(0, 2).join(' ');
