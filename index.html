@@ -389,7 +389,7 @@ async function trackEvent(eventType, metadata) {
   } catch(e) {}
 }
 
-trackEvent("page_view", {page: "landing", utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign});
+trackEvent("page_view", {page: "landing", utm_source: UTM_PARAMS.source, utm_medium: UTM_PARAMS.medium, utm_campaign: UTM_PARAMS.campaign, ref: REF_CODE || "none"});
 
 async function betaSignup() {
   var name = document.getElementById('userName').value.trim();
