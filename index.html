@@ -482,7 +482,7 @@ async function betaSignup() {
   }
 
   if (r.data && r.data.user && r.data.user.identities && r.data.user.identities.length === 0) {
-    msg.innerText = 'This email is already registered. Head to the dashboard to log in.'; msg.style.color = '#ffaa00';
+    msg.innerHTML = 'This email is already registered. <a href="https://patriotradar.github.io/patriot-radar-dashboard/" style="color:#00ff88;font-weight:700;text-decoration:underline">Log in here</a>'; msg.style.color = '#ffaa00';
     return;
   }
 
